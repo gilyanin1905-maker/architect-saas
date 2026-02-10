@@ -1,0 +1,8 @@
+{
+  "name": "Architect SaaS - Local AI Solutions",
+  "description": "Premium landing page for an AI development agency specializing in local LLMs, private AI infrastructure, and business automation.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
