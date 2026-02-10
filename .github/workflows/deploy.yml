@@ -27,7 +27,7 @@ jobs:
       - name: Deploy to Beget via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
-          server: ftp.beget.com
+          server: sdajfhhl.beget.tech
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: /public_html/
