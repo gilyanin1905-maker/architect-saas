@@ -30,5 +30,5 @@ jobs:
           server: sdajfhhl.beget.tech
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: /public_html/
+          server-dir: /sdajfhhl.beget.tech/
           local-dir: dist/
