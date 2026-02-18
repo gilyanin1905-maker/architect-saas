@@ -1,4 +1,3 @@
-
 export interface Service {
   id: number;
   title: string;
@@ -7,7 +6,7 @@ export interface Service {
   features: string[];
   icon: string;
   gradient: string; // New: CSS gradient value
-  accent: string;   // New: Hex color for glow
+  accent: string; // New: Hex color for glow
 }
 
 export interface CaseStudy {
@@ -28,8 +27,8 @@ export interface FAQItem {
 }
 
 export enum Language {
-  RU = 'RU',
-  EN = 'EN'
+  RU = "RU",
+  EN = "EN",
 }
 
 export interface ContactFormData {
