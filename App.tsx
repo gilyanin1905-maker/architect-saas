@@ -200,9 +200,10 @@ const App: React.FC = () => {
 
   return (
     <div className="relative h-[100dvh] w-full overflow-hidden transition-colors duration-700 bg-black">
-      <AnimatePresence>
+      {/* Temporarily disabled for debugging */}
+      {/* <AnimatePresence>
         {isLoading && <Preloader onComplete={() => setIsLoading(false)} />}
-      </AnimatePresence>
+      </AnimatePresence> */}
 
       <SpaceBackground theme={theme} />
 
