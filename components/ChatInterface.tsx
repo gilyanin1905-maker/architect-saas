@@ -61,9 +61,9 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, lang, tr
   const [showScrollButton, setShowScrollButton] = useState(false);
 
   // Interaction State
-  const [hoveredMessageId, setHoveredMessageId] = useState<string | null>(null);
   const [replyingToMessageId, setReplyingToMessageId] = useState<string | null>(null);
   const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
+  const [copiedMessageId, setCopiedMessageId] = useState<string | null>(null);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
@@ -204,9 +204,10 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, lang, tr
 
   // --- MESSAGE ACTIONS ---
 
-  const handleCopy = (text: string) => {
+  const handleCopy = (msgId: string, text: string) => {
     navigator.clipboard.writeText(text);
-    setHoveredMessageId(null);
+    setCopiedMessageId(msgId);
+    setTimeout(() => setCopiedMessageId(null), 2000);
   };
 
   const handleDeleteMessage = (msgId: string) => {
@@ -602,8 +603,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, lang, tr
                       <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        onMouseEnter={() => setHoveredMessageId(msg.id)}
-                        onMouseLeave={() => setHoveredMessageId(null)}
                         className={`flex w-full group relative ${isUser ? "justify-end" : "justify-start"}`}
                       >
                         {/* Action Buttons (Hover) */}
@@ -620,11 +619,25 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, lang, tr
                             <ReplyIcon width={14} height={14} />
                           </button>
                           <button
-                            onClick={() => handleCopy(msg.content)}
-                            className="p-1.5 text-white/60 hover:text-[#00f2ff] hover:bg-white/5 rounded"
-                            title="Copy"
+                            onClick={() => handleCopy(msg.id, msg.content)}
+                            className={`p-1.5 rounded transition-colors flex items-center gap-1 ${
+                              copiedMessageId === msg.id
+                                ? "text-green-400 bg-green-400/10"
+                                : "text-white/60 hover:text-[#00f2ff] hover:bg-white/5"
+                            }`}
+                            title={copiedMessageId === msg.id ? "Copied!" : "Copy"}
+                            aria-label={copiedMessageId === msg.id ? "Copied!" : "Copy message"}
                           >
-                            <CopyIcon width={14} height={14} />
+                            {copiedMessageId === msg.id ? (
+                              <CheckIcon width={14} height={14} />
+                            ) : (
+                              <CopyIcon width={14} height={14} />
+                            )}
+                            {copiedMessageId === msg.id && (
+                              <span className="text-[10px] font-bold uppercase tracking-tighter">
+                                Copied
+                              </span>
+                            )}
                           </button>
                           {isUser && (
                             <button
