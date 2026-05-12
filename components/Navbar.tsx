@@ -76,12 +76,14 @@ const Navbar: React.FC<NavbarProps> = ({
                   <button
                     onClick={() => onLangChange(Language.RU)}
                     className={`flex-1 py-2 rounded-lg text-[10px] font-bold transition-all ${lang === Language.RU ? "bg-[#00f2ff] text-black shadow-sm" : "text-white/40 hover:text-white"}`}
+                    aria-label="Switch to Russian"
                   >
                     RU
                   </button>
                   <button
                     onClick={() => onLangChange(Language.EN)}
                     className={`flex-1 py-2 rounded-lg text-[10px] font-bold transition-all ${lang === Language.EN ? "bg-[#00f2ff] text-black shadow-sm" : "text-white/40 hover:text-white"}`}
+                    aria-label="Switch to English"
                   >
                     EN
                   </button>
@@ -164,6 +166,7 @@ const Navbar: React.FC<NavbarProps> = ({
                 <button
                   onClick={onThemeToggle}
                   className="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 text-white/70 [.light_&]:text-slate-600"
+                  aria-label="Toggle theme"
                 >
                   {theme === "dark" ? (
                     <svg
@@ -250,6 +253,7 @@ const Navbar: React.FC<NavbarProps> = ({
               <button
                 onClick={onThemeToggle}
                 className="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 transition-all text-white/70 [.light_&]:text-slate-600 hover:text-[#00f2ff]"
+                aria-label="Toggle theme"
               >
                 {theme === "dark" ? (
                   <svg
@@ -288,12 +292,14 @@ const Navbar: React.FC<NavbarProps> = ({
                 <button
                   onClick={() => onLangChange(Language.RU)}
                   className={`w-8 h-8 rounded-full flex items-center justify-center text-[9px] font-bold transition-all ${lang === Language.RU ? "bg-[#00f2ff] text-black shadow-sm" : "text-white/40 hover:text-white"}`}
+                  aria-label="Switch to Russian"
                 >
                   RU
                 </button>
                 <button
                   onClick={() => onLangChange(Language.EN)}
                   className={`w-8 h-8 rounded-full flex items-center justify-center text-[9px] font-bold transition-all ${lang === Language.EN ? "bg-[#00f2ff] text-black shadow-sm" : "text-white/40 hover:text-white"}`}
+                  aria-label="Switch to English"
                 >
                   EN
                 </button>
