@@ -127,7 +127,10 @@ const ROICalculator: React.FC<ROICalculatorProps> = ({ lang }) => {
               <div className="space-y-6 md:space-y-8 mb-8 relative z-10">
                 <div>
                   <div className="flex justify-between mb-2 md:mb-4">
-                    <label className="text-xs font-bold text-white/40 uppercase tracking-widest">
+                    <label
+                      htmlFor="roi-requests"
+                      className="text-xs font-bold text-white/40 uppercase tracking-widest cursor-pointer"
+                    >
                       {t.requestsLabel}
                     </label>
                     <span className="text-[#00f2ff] font-mono font-bold">
@@ -135,6 +138,7 @@ const ROICalculator: React.FC<ROICalculatorProps> = ({ lang }) => {
                     </span>
                   </div>
                   <input
+                    id="roi-requests"
                     type="range"
                     min="100"
                     max="10000"
@@ -147,12 +151,16 @@ const ROICalculator: React.FC<ROICalculatorProps> = ({ lang }) => {
 
                 <div>
                   <div className="flex justify-between mb-2 md:mb-4">
-                    <label className="text-xs font-bold text-white/40 uppercase tracking-widest">
+                    <label
+                      htmlFor="roi-tokens"
+                      className="text-xs font-bold text-white/40 uppercase tracking-widest cursor-pointer"
+                    >
                       {t.tokensLabel}
                     </label>
                     <span className="text-[#00f2ff] font-mono font-bold">{tokens}</span>
                   </div>
                   <input
+                    id="roi-tokens"
                     type="range"
                     min="100"
                     max="2000"
@@ -168,7 +176,10 @@ const ROICalculator: React.FC<ROICalculatorProps> = ({ lang }) => {
                 <div className="text-[9px] md:text-[10px] font-bold text-white/30 uppercase tracking-[4px] mb-2">
                   {t.monthlySavings}
                 </div>
-                <div className="text-5xl md:text-7xl font-display font-black text-white tracking-tight">
+                <div
+                  aria-live="polite"
+                  className="text-5xl md:text-7xl font-display font-black text-white tracking-tight"
+                >
                   ${Math.max(0, Math.round(monthlySavings)).toLocaleString()}
                 </div>
                 <div className="text-xs font-bold text-[#7b2ff7] mt-3 uppercase tracking-widest">
