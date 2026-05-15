@@ -1,0 +1,3 @@
+## 2024-05-15 - Enhancing Form Accessibility and Efficiency
+**Learning:** Standard form inputs in the current design system often lack explicit label-to-input connections and `autoComplete` attributes. This hinders screen reader navigation and increases friction for returning users who rely on browser autofill. Additionally, async status updates (like "Message sent") are not announced to assistive technologies without `aria-live` regions.
+**Action:** Always verify that every form field has a unique `id` matching its label's `htmlFor`, provide appropriate `autoComplete` values for common fields (name, email, tel, etc.), and use `aria-live="polite"` for dynamic success/error messages to ensure they are announced by screen readers.
