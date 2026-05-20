@@ -1,0 +1,3 @@
+## 2025-05-15 - [Form Accessibility & PR Hygiene]
+**Learning:** In projects with automated formatting or large lockfiles, simple code changes can easily bloat into thousands of lines if not carefully managed. Accessibility for forms (label association, ARIA states) is a high-impact, low-line-count improvement that significantly helps screen reader users.
+**Action:** Always verify `git status` before committing to ensure no artifacts (like lockfiles or verification scripts) or unrelated format changes are included in the PR. Link labels to inputs using `htmlFor` and `id` to ensure proper click targets and screen reader announcements.
