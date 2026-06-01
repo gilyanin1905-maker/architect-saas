@@ -1,0 +1,3 @@
+## 2025-06-01 - [Form Focus Management & Accessibility Polish]
+**Learning:** For asynchronous forms, providing immediate visual and screen reader feedback via focus management is crucial. Moving focus to the success message prevents screen reader users from getting "lost" after the form content disappears or changes. Additionally, explicitly linking labels to range inputs (sliders) significantly improves the touch/click target area and ensures assistive technologies correctly identify the input's purpose.
+**Action:** Always use `useRef` to manage focus transitions between form states (e.g., idle -> success -> idle) and ensure every input, including sliders, has a unique `id` matched with a label's `htmlFor`.
