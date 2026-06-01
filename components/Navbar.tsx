@@ -87,7 +87,7 @@ const Navbar: React.FC<NavbarProps> = ({
                   </button>
                 </div>
 
-                {navLinks.map((link, i) => (
+                {navLinks.map((link) => (
                   <a
                     key={link.name}
                     href={link.href}
@@ -163,6 +163,7 @@ const Navbar: React.FC<NavbarProps> = ({
                 {/* Theme (Mobile) */}
                 <button
                   onClick={onThemeToggle}
+                  aria-label="Toggle theme"
                   className="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 text-white/70 [.light_&]:text-slate-600"
                 >
                   {theme === "dark" ? (
@@ -249,6 +250,7 @@ const Navbar: React.FC<NavbarProps> = ({
             <div className="flex items-center gap-3">
               <button
                 onClick={onThemeToggle}
+                aria-label="Toggle theme"
                 className="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 transition-all text-white/70 [.light_&]:text-slate-600 hover:text-[#00f2ff]"
               >
                 {theme === "dark" ? (
