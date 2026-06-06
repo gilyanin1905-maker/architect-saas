@@ -1,0 +1,3 @@
+## 2025-05-15 - Form State Focus Management
+**Learning:** Transitioning between form states (e.g., 'idle' -> 'success' -> 'idle') can leave keyboard and screen reader users disoriented if focus is not explicitly managed. Simply using `autoFocus` can cause unexpected page jumps on initial mount.
+**Action:** Use a combination of `useRef` and `useEffect` with a previous state tracker to programmatically shift focus to success messages when they appear, and return focus to the primary input field when the form is reset. Always ensure success messages have `tabIndex={-1}` to be focusable but not part of the regular tab order.
