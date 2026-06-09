@@ -40,7 +40,9 @@ export default [
         CanvasRenderingContext2D: 'readonly',
         SVGSVGElement: 'readonly',
         MouseEvent: 'readonly',
-        Node: 'readonly'
+        KeyboardEvent: 'readonly',
+        Node: 'readonly',
+        HTMLButtonElement: 'readonly'
       }
     },
     plugins: {
