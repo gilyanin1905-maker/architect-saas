@@ -87,7 +87,7 @@ const Navbar: React.FC<NavbarProps> = ({
                   </button>
                 </div>
 
-                {navLinks.map((link, i) => (
+                {navLinks.map(link => (
                   <a
                     key={link.name}
                     href={link.href}
@@ -129,7 +129,8 @@ const Navbar: React.FC<NavbarProps> = ({
             className={`md:hidden flex items-center justify-center rounded-full transition-all z-20 relative
                   ${isMobileMenuOpen ? "bg-white text-black w-10 h-10 rotate-90" : "bg-white/5 hover:bg-white/10 text-white w-12 h-12"}
               `}
-            aria-label="Menu"
+            aria-label={isMobileMenuOpen ? UI_TEXT[lang].faq.close : "Menu"}
+            aria-expanded={isMobileMenuOpen}
           >
             {isMobileMenuOpen ? <XIcon /> : <MenuIcon />}
           </motion.button>
