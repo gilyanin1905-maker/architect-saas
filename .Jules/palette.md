@@ -1,0 +1,3 @@
+## 2025-05-15 - Accessible Form Feedback and Focus Management
+**Learning:** Providing accessible feedback for asynchronous form submissions requires more than just showing a message. Using `role="status"` ensures screen readers are aware of the update, but programmatic focus management is essential to guide the user to the feedback or back to the start of the form upon reset.
+**Action:** Implement `tabIndex={-1}` on success/error containers to allow programmatic focus via `ref.current?.focus()`. Use `aria-busy` and dynamic `aria-label` on buttons to communicate loading states. Always ensure form reset actions return focus to the first logical input to prevent the user from getting "lost" on the page.
