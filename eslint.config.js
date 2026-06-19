@@ -33,6 +33,7 @@ export default [
         fetch: 'readonly',
         // DOM types
         HTMLElement: 'readonly',
+        HTMLInputElement: 'readonly',
         HTMLDivElement: 'readonly',
         HTMLAnchorElement: 'readonly',
         HTMLTextAreaElement: 'readonly',
