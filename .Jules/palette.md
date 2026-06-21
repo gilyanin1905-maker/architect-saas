@@ -1,0 +1,3 @@
+## 2025-05-23 - Focus Management on Form Success
+**Learning:** Programmatic focus management is essential for single-page applications where form submissions don't trigger a page reload. Moving focus to a success message ensures screen readers immediately announce the completion of the action to the user. Using `tabIndex={-1}` allows the element to receive focus programmatically without adding it to the natural tab order.
+**Action:** Always implement a `ref` on success/feedback containers and use a `useEffect` to trigger `.focus()` when the state changes to 'success'. Combine this with `role="status"` and `aria-live="polite"` for maximum compatibility.
