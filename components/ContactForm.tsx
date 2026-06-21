@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { ContactFormData, Language } from "../types";
 import { UI_TEXT } from "../constants";
 import { BotIcon, TelegramIcon, VKIcon } from "./Icons";
@@ -16,7 +16,14 @@ const ContactForm: React.FC<ContactFormProps> = ({ lang }) => {
     message: "",
   });
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const successRef = useRef<HTMLDivElement>(null);
   const t = UI_TEXT[lang].contact;
+
+  useEffect(() => {
+    if (status === "success" && successRef.current) {
+      successRef.current.focus();
+    }
+  }, [status]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -126,7 +133,13 @@ const ContactForm: React.FC<ContactFormProps> = ({ lang }) => {
 
           <div className="glass p-6 md:p-10 lg:p-12 rounded-[32px] md:rounded-[40px] relative">
             {status === "success" ? (
-              <div className="h-full flex flex-col items-center justify-center text-center space-y-6 animate-[fadeIn_0.5s_ease]">
+              <div
+                ref={successRef}
+                tabIndex={-1}
+                role="status"
+                aria-live="polite"
+                className="h-full flex flex-col items-center justify-center text-center space-y-6 animate-[fadeIn_0.5s_ease] focus:outline-none"
+              >
                 <div className="w-20 h-20 bg-green-500/20 text-green-500 rounded-full flex items-center justify-center">
                   <svg
                     width="40"
@@ -152,11 +165,17 @@ const ContactForm: React.FC<ContactFormProps> = ({ lang }) => {
               <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
                 <div className="grid md:grid-cols-2 gap-4 md:gap-6">
                   <div className="space-y-2">
-                    <label className="text-xs font-bold text-white/40 uppercase ml-1">
+                    <label
+                      htmlFor="contact-name"
+                      className="text-xs font-bold text-white/40 uppercase ml-1 cursor-pointer"
+                    >
                       {t.name}
                     </label>
                     <input
+                      id="contact-name"
+                      name="name"
                       type="text"
+                      autoComplete="name"
                       required
                       value={formData.name}
                       onChange={e => setFormData({ ...formData, name: e.target.value })}
@@ -165,11 +184,17 @@ const ContactForm: React.FC<ContactFormProps> = ({ lang }) => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-xs font-bold text-white/40 uppercase ml-1">
+                    <label
+                      htmlFor="contact-company"
+                      className="text-xs font-bold text-white/40 uppercase ml-1 cursor-pointer"
+                    >
                       {t.company}
                     </label>
                     <input
+                      id="contact-company"
+                      name="organization"
                       type="text"
+                      autoComplete="organization"
                       value={formData.company}
                       onChange={e => setFormData({ ...formData, company: e.target.value })}
                       placeholder={t.company}
@@ -180,11 +205,17 @@ const ContactForm: React.FC<ContactFormProps> = ({ lang }) => {
 
                 <div className="grid md:grid-cols-2 gap-4 md:gap-6">
                   <div className="space-y-2">
-                    <label className="text-xs font-bold text-white/40 uppercase ml-1">
+                    <label
+                      htmlFor="contact-email"
+                      className="text-xs font-bold text-white/40 uppercase ml-1 cursor-pointer"
+                    >
                       {t.email}
                     </label>
                     <input
+                      id="contact-email"
+                      name="email"
                       type="email"
+                      autoComplete="email"
                       required
                       value={formData.email}
                       onChange={e => setFormData({ ...formData, email: e.target.value })}
@@ -193,11 +224,17 @@ const ContactForm: React.FC<ContactFormProps> = ({ lang }) => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-xs font-bold text-white/40 uppercase ml-1">
+                    <label
+                      htmlFor="contact-telegram"
+                      className="text-xs font-bold text-white/40 uppercase ml-1 cursor-pointer"
+                    >
                       {t.telegram}
                     </label>
                     <input
+                      id="contact-telegram"
+                      name="telegram"
                       type="text"
+                      autoComplete="username"
                       value={formData.telegram}
                       onChange={e => setFormData({ ...formData, telegram: e.target.value })}
                       placeholder="@username"
@@ -207,10 +244,15 @@ const ContactForm: React.FC<ContactFormProps> = ({ lang }) => {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-xs font-bold text-white/40 uppercase ml-1">
+                  <label
+                    htmlFor="contact-message"
+                    className="text-xs font-bold text-white/40 uppercase ml-1 cursor-pointer"
+                  >
                     {t.message}
                   </label>
                   <textarea
+                    id="contact-message"
+                    name="message"
                     rows={4}
                     required
                     value={formData.message}
@@ -223,6 +265,8 @@ const ContactForm: React.FC<ContactFormProps> = ({ lang }) => {
                 <button
                   type="submit"
                   disabled={status === "loading"}
+                  aria-busy={status === "loading"}
+                  aria-label={status === "loading" ? t.sending : t.submit}
                   className="w-full py-5 bg-gradient-to-r from-[#00f2ff] to-[#7b2ff7] rounded-2xl font-bold text-lg text-black shadow-[0_0_30px_rgba(0,242,255,0.2)] hover:shadow-[0_0_50px_rgba(0,242,255,0.4)] transition-all disabled:opacity-50"
                 >
                   {status === "loading" ? (
