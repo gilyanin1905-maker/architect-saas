@@ -1,0 +1,3 @@
+## 2025-05-15 - Contact Form Accessibility and Focus Management
+**Learning:** In single-page applications, removing the focused element (e.g., the submit button) from the DOM upon successful form submission leaves keyboard and screen reader users without a focus point. Programmatically shifting focus to the success message or a feedback container is essential for a smooth UX.
+**Action:** Always implement focus management when toggling visibility of form states (loading, success, error) by using refs and focusing the feedback container (with `tabIndex={-1}` and `role="status"`) or the primary action in the new state.
