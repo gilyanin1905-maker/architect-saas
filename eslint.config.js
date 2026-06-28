@@ -37,9 +37,11 @@ export default [
         HTMLAnchorElement: 'readonly',
         HTMLTextAreaElement: 'readonly',
         HTMLCanvasElement: 'readonly',
+        HTMLButtonElement: 'readonly',
         CanvasRenderingContext2D: 'readonly',
         SVGSVGElement: 'readonly',
         MouseEvent: 'readonly',
+        KeyboardEvent: 'readonly',
         Node: 'readonly'
       }
     },
