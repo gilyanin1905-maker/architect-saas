@@ -34,6 +34,7 @@ export default [
         // DOM types
         HTMLElement: 'readonly',
         HTMLDivElement: 'readonly',
+        HTMLInputElement: 'readonly',
         HTMLAnchorElement: 'readonly',
         HTMLTextAreaElement: 'readonly',
         HTMLCanvasElement: 'readonly',
