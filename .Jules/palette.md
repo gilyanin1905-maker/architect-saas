@@ -1,0 +1,3 @@
+## 2025-05-15 - Enhanced Form Accessibility and Focus Management
+**Learning:** Programmatic focus management is crucial for SPA state transitions (like form submission success states). Moving focus to a success message with `role="status"` ensures screen reader users are immediately aware of the result. Additionally, when using wrapper components that inject IDs (like `SectionWrapper`), child components must avoid duplicating those IDs to prevent DOM invalidity.
+**Action:** Always implement `useEffect` based focus shifts for significant UI state changes and verify ID uniqueness when using high-level layout wrappers.
