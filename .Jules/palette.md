@@ -1,0 +1,3 @@
+## 2026-07-08 - [Contact Form Accessibility & Focus Management]
+**Learning:** For forms that use state-based rendering for success/error messages (e.g., swapping the form with a success message), focus is often lost. Programmatically moving focus to the success message (with role="status" and tabIndex={-1}) ensures screen reader users are immediately aware of the result. Similarly, restoring focus to the first input when resetting the form improves the "Send Again" flow.
+**Action:** Always implement focus management on form state transitions. Use role="status" and aria-live="polite" for feedback containers.
