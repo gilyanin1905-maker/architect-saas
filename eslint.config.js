@@ -35,11 +35,14 @@ export default [
         HTMLElement: 'readonly',
         HTMLDivElement: 'readonly',
         HTMLAnchorElement: 'readonly',
+        HTMLButtonElement: 'readonly',
+        HTMLInputElement: 'readonly',
         HTMLTextAreaElement: 'readonly',
         HTMLCanvasElement: 'readonly',
         CanvasRenderingContext2D: 'readonly',
         SVGSVGElement: 'readonly',
         MouseEvent: 'readonly',
+        KeyboardEvent: 'readonly',
         Node: 'readonly'
       }
     },
