@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { SERVICES_DATA, UI_TEXT } from "../constants";
 import { Language } from "../types";
-import { TelegramIcon, VKIcon, BotIcon, XIcon } from "./Icons";
+import { TelegramIcon, BotIcon, XIcon } from "./Icons";
 
 interface ServicesProps {
   lang: Language;

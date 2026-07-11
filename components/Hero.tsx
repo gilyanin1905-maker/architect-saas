@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from "framer-motion";
 import { Language } from '../types';
 import { UI_TEXT } from '../constants';
 import { BotIcon, VKIcon } from './Icons';

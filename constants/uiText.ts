@@ -1,5 +1,3 @@
-import { Language } from "../types";
-
 export const UI_TEXT = {
   ru: {
     // Navbar

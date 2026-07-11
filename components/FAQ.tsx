@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { FAQ_DATA, UI_TEXT } from "../constants";
-import { XIcon, ChevronDown } from "./Icons";
+import { XIcon } from "./Icons";
 import { Language } from "../types";
 
 interface FAQProps {
@@ -39,6 +39,23 @@ const FAQ: React.FC<FAQProps> = ({ lang }) => {
   const [activeQuestionId, setActiveQuestionId] = useState<number | null>(null);
   const faqItems = FAQ_DATA[lang];
   const t = UI_TEXT[lang].faq;
+
+  // Handle ESC key to close drawer
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setActiveQuestionId(null);
+      }
+    };
+
+    if (activeQuestionId !== null) {
+      window.addEventListener("keydown", handleKeyDown);
+    }
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [activeQuestionId]);
 
   // Find active item for the drawer
   const activeItem = faqItems.find(i => i.id === activeQuestionId);

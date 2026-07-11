@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef, FormEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  BotIcon,
   XIcon,
   MicIcon,
   MenuIcon,
@@ -61,7 +60,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, lang, tr
   const [showScrollButton, setShowScrollButton] = useState(false);
 
   // Interaction State
-  const [hoveredMessageId, setHoveredMessageId] = useState<string | null>(null);
+  const [_, setHoveredMessageId] = useState<string | null>(null);
   const [replyingToMessageId, setReplyingToMessageId] = useState<string | null>(null);
   const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
 
