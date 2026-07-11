@@ -87,7 +87,7 @@ const Navbar: React.FC<NavbarProps> = ({
                   </button>
                 </div>
 
-                {navLinks.map((link, i) => (
+                {navLinks.map((link) => (
                   <a
                     key={link.name}
                     href={link.href}

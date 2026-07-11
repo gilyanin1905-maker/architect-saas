@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback, Suspense, lazy } from "react";
-import { motion, useInView, AnimatePresence } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import SpaceBackground from "./components/SpaceBackground";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import Loader from "./components/Loader";
-import Preloader from "./components/Preloader";
 import EvaRobot from "./components/EvaRobot";
 import { Language } from "./types";
 
@@ -35,7 +34,6 @@ const ContactForm = lazy(SectionImports.contact);
 const Footer = lazy(SectionImports.footer);
 
 const App: React.FC = () => {
-  const [isLoading, setIsLoading] = useState(true);
   const [lang, setLang] = useState<Language>(Language.RU);
   const [theme, setTheme] = useState<"dark" | "light">("dark");
   const [activeSection, setActiveSection] = useState(0);

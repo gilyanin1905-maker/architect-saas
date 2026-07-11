@@ -1,5 +1,5 @@
 import React from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { PRESENTATION_DATA, UI_TEXT } from "../constants";
 import { Language } from "../types";
 
@@ -274,7 +274,6 @@ const WhyLocalAI: React.FC<WhyLocalAIProps> = ({ lang }) => {
 const CardItem = ({
   item,
   index,
-  total,
   lang,
 }: {
   item: any;
