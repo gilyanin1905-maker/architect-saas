@@ -35,6 +35,7 @@ export default [
         HTMLElement: 'readonly',
         HTMLDivElement: 'readonly',
         HTMLAnchorElement: 'readonly',
+        HTMLInputElement: 'readonly',
         HTMLTextAreaElement: 'readonly',
         HTMLCanvasElement: 'readonly',
         CanvasRenderingContext2D: 'readonly',
