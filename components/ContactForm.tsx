@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { ContactFormData, Language } from "../types";
 import { UI_TEXT } from "../constants";
 import { BotIcon, TelegramIcon, VKIcon } from "./Icons";
@@ -18,6 +18,10 @@ const ContactForm: React.FC<ContactFormProps> = ({ lang }) => {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const t = UI_TEXT[lang].contact;
 
+  const firstInputRef = useRef<HTMLInputElement>(null);
+  const successContainerRef = useRef<HTMLDivElement>(null);
+  const prevStatusRef = useRef<string>("idle");
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus("loading");
@@ -28,6 +32,15 @@ const ContactForm: React.FC<ContactFormProps> = ({ lang }) => {
       setFormData({ name: "", company: "", email: "", telegram: "", message: "" });
     }, 1500);
   };
+
+  useEffect(() => {
+    if (status === "success" && prevStatusRef.current !== "success") {
+      successContainerRef.current?.focus();
+    } else if (status === "idle" && prevStatusRef.current === "success") {
+      firstInputRef.current?.focus();
+    }
+    prevStatusRef.current = status;
+  }, [status]);
 
   return (
     <section id="contact" className="py-12 md:py-24 relative overflow-hidden">
@@ -126,7 +139,13 @@ const ContactForm: React.FC<ContactFormProps> = ({ lang }) => {
 
           <div className="glass p-6 md:p-10 lg:p-12 rounded-[32px] md:rounded-[40px] relative">
             {status === "success" ? (
-              <div className="h-full flex flex-col items-center justify-center text-center space-y-6 animate-[fadeIn_0.5s_ease]">
+              <div
+                ref={successContainerRef}
+                tabIndex={-1}
+                role="status"
+                aria-live="polite"
+                className="h-full flex flex-col items-center justify-center text-center space-y-6 animate-[fadeIn_0.5s_ease] outline-none"
+              >
                 <div className="w-20 h-20 bg-green-500/20 text-green-500 rounded-full flex items-center justify-center">
                   <svg
                     width="40"
@@ -143,7 +162,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ lang }) => {
                 <p className="text-white/60">{t.successDesc}</p>
                 <button
                   onClick={() => setStatus("idle")}
-                  className="px-8 py-3 bg-white/5 rounded-xl text-sm font-bold border border-white/10 hover:bg-white/10 transition-all"
+                  className="px-8 py-3 bg-white/5 rounded-xl text-sm font-bold border border-white/10 hover:bg-white/10 transition-all focus-visible:ring-2 focus-visible:ring-[#00f2ff] outline-none"
                 >
                   {t.sendAgain}
                 </button>
@@ -152,12 +171,18 @@ const ContactForm: React.FC<ContactFormProps> = ({ lang }) => {
               <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
                 <div className="grid md:grid-cols-2 gap-4 md:gap-6">
                   <div className="space-y-2">
-                    <label className="text-xs font-bold text-white/40 uppercase ml-1">
+                    <label
+                      htmlFor="contact-name"
+                      className="text-xs font-bold text-white/40 uppercase ml-1"
+                    >
                       {t.name}
                     </label>
                     <input
+                      id="contact-name"
+                      ref={firstInputRef}
                       type="text"
                       required
+                      autoComplete="name"
                       value={formData.name}
                       onChange={e => setFormData({ ...formData, name: e.target.value })}
                       placeholder={t.name}
@@ -165,11 +190,16 @@ const ContactForm: React.FC<ContactFormProps> = ({ lang }) => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-xs font-bold text-white/40 uppercase ml-1">
+                    <label
+                      htmlFor="contact-company"
+                      className="text-xs font-bold text-white/40 uppercase ml-1"
+                    >
                       {t.company}
                     </label>
                     <input
+                      id="contact-company"
                       type="text"
+                      autoComplete="organization"
                       value={formData.company}
                       onChange={e => setFormData({ ...formData, company: e.target.value })}
                       placeholder={t.company}
@@ -180,12 +210,17 @@ const ContactForm: React.FC<ContactFormProps> = ({ lang }) => {
 
                 <div className="grid md:grid-cols-2 gap-4 md:gap-6">
                   <div className="space-y-2">
-                    <label className="text-xs font-bold text-white/40 uppercase ml-1">
+                    <label
+                      htmlFor="contact-email"
+                      className="text-xs font-bold text-white/40 uppercase ml-1"
+                    >
                       {t.email}
                     </label>
                     <input
+                      id="contact-email"
                       type="email"
                       required
+                      autoComplete="email"
                       value={formData.email}
                       onChange={e => setFormData({ ...formData, email: e.target.value })}
                       placeholder="example@mail.ru"
@@ -193,11 +228,16 @@ const ContactForm: React.FC<ContactFormProps> = ({ lang }) => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-xs font-bold text-white/40 uppercase ml-1">
+                    <label
+                      htmlFor="contact-telegram"
+                      className="text-xs font-bold text-white/40 uppercase ml-1"
+                    >
                       {t.telegram}
                     </label>
                     <input
+                      id="contact-telegram"
                       type="text"
+                      autoComplete="username"
                       value={formData.telegram}
                       onChange={e => setFormData({ ...formData, telegram: e.target.value })}
                       placeholder="@username"
@@ -207,10 +247,14 @@ const ContactForm: React.FC<ContactFormProps> = ({ lang }) => {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-xs font-bold text-white/40 uppercase ml-1">
+                  <label
+                    htmlFor="contact-message"
+                    className="text-xs font-bold text-white/40 uppercase ml-1"
+                  >
                     {t.message}
                   </label>
                   <textarea
+                    id="contact-message"
                     rows={4}
                     required
                     value={formData.message}
@@ -223,7 +267,9 @@ const ContactForm: React.FC<ContactFormProps> = ({ lang }) => {
                 <button
                   type="submit"
                   disabled={status === "loading"}
-                  className="w-full py-5 bg-gradient-to-r from-[#00f2ff] to-[#7b2ff7] rounded-2xl font-bold text-lg text-black shadow-[0_0_30px_rgba(0,242,255,0.2)] hover:shadow-[0_0_50px_rgba(0,242,255,0.4)] transition-all disabled:opacity-50"
+                  aria-busy={status === "loading"}
+                  aria-label={status === "loading" ? t.sending : t.submit}
+                  className="w-full py-5 bg-gradient-to-r from-[#00f2ff] to-[#7b2ff7] rounded-2xl font-bold text-lg text-black shadow-[0_0_30px_rgba(0,242,255,0.2)] hover:shadow-[0_0_50px_rgba(0,242,255,0.4)] transition-all disabled:opacity-50 focus-visible:ring-4 focus-visible:ring-[#00f2ff]/50 outline-none"
                 >
                   {status === "loading" ? (
                     <div className="w-6 h-6 border-2 border-black/30 border-t-black rounded-full animate-spin mx-auto"></div>
