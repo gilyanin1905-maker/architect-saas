@@ -1,0 +1,3 @@
+## 2026-07-06 - Element Ambiguity in Snap-Scroll Containers
+**Learning:** In applications using 'snap-container' scroll behavior (CSS scroll-snap), automated verification tools like Playwright may encounter multiple instances of a component if the layout or lazy-loading logic causes overlapping intersections. This can lead to "strict mode violation: resolved to 2 elements" errors when attempting to interact with unique IDs that are technically present in multiple scroll-snap sections or if the DOM isn't cleaned up during transitions.
+**Action:** Always use specific locators (e.g., `page.locator('section#contact #contact-name')`) rather than global ID selectors when working with snap-scroll layouts to ensure the test targets the currently active viewport element.
