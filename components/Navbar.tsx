@@ -64,6 +64,7 @@ const Navbar: React.FC<NavbarProps> = ({
         <AnimatePresence>
           {isMobileMenuOpen && (
             <motion.div
+              id="mobile-menu"
               initial={{ opacity: 0, y: 20, scale: 0.9 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 10, scale: 0.9 }}
@@ -129,7 +130,9 @@ const Navbar: React.FC<NavbarProps> = ({
             className={`md:hidden flex items-center justify-center rounded-full transition-all z-20 relative
                   ${isMobileMenuOpen ? "bg-white text-black w-10 h-10 rotate-90" : "bg-white/5 hover:bg-white/10 text-white w-12 h-12"}
               `}
-            aria-label="Menu"
+            aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={isMobileMenuOpen}
+            aria-controls="mobile-menu"
           >
             {isMobileMenuOpen ? <XIcon /> : <MenuIcon />}
           </motion.button>
@@ -164,6 +167,7 @@ const Navbar: React.FC<NavbarProps> = ({
                 <button
                   onClick={onThemeToggle}
                   className="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 text-white/70 [.light_&]:text-slate-600"
+                  aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
                 >
                   {theme === "dark" ? (
                     <svg
@@ -250,6 +254,7 @@ const Navbar: React.FC<NavbarProps> = ({
               <button
                 onClick={onThemeToggle}
                 className="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 transition-all text-white/70 [.light_&]:text-slate-600 hover:text-[#00f2ff]"
+                aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
               >
                 {theme === "dark" ? (
                   <svg

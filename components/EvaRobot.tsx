@@ -437,13 +437,22 @@ const EvaRobot: React.FC<EvaRobotProps> = ({
             {/* Robot Body Container - Rotation Applied Here */}
             <motion.div
               onClick={handleRobotClick}
+              onKeyDown={e => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  handleRobotClick();
+                }
+              }}
+              role="button"
+              tabIndex={0}
+              aria-label="Eva AI Assistant"
               animate={{
                 rotate: mode === "threat" ? [0, -5, 5, -5, 0] : [0, 1, -1, 0], // Reduced idle rotation for stability
               }}
               transition={{
                 rotate: { duration: mode === "threat" ? 0.2 : 4, repeat: Infinity, ease: "linear" },
               }}
-              className="transition-transform duration-300 hover:scale-110 active:scale-95 origin-center"
+              className="transition-transform duration-300 hover:scale-110 active:scale-95 origin-center outline-none focus-visible:ring-2 ring-[#00f2ff] rounded-full"
             >
               <EvaBodyParts emotion={emotion} mousePos={mousePos} mode={mode} />
             </motion.div>
