@@ -481,7 +481,11 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, lang, tr
                 <MenuIcon className="w-5 h-5 text-white/50" />
                 <span>Architect AI</span>
               </div>
-              <button onClick={() => setIsSidebarOpen(false)} className="md:hidden text-white/50">
+              <button
+                onClick={() => setIsSidebarOpen(false)}
+                className="md:hidden text-white/50"
+                aria-label="Close sidebar"
+              >
                 <XIcon className="w-6 h-6" />
               </button>
             </div>
@@ -491,6 +495,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, lang, tr
               <button
                 onClick={createNewSession}
                 className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-[#2b5278]/30 text-[#00f2ff] transition-all mb-4 group"
+                aria-label="Start new chat"
               >
                 <div className="w-10 h-10 rounded-full bg-[#00f2ff]/10 flex items-center justify-center group-hover:bg-[#00f2ff] group-hover:text-black transition-colors">
                   <span className="text-xl">+</span>
@@ -532,6 +537,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, lang, tr
                   <button
                     onClick={e => deleteSession(e, session.id)}
                     className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-white/30 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity bg-[#17212b] rounded-full shadow-md"
+                    aria-label={`Delete chat session ${session.title}`}
                   >
                     <TrashIcon width={14} height={14} />
                   </button>
@@ -545,7 +551,11 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, lang, tr
             {/* Header */}
             <div className="h-16 flex items-center justify-between px-4 md:px-6 bg-[#17212b] border-b border-black/20 z-10 shadow-md">
               <div className="flex items-center gap-4">
-                <button onClick={() => setIsSidebarOpen(true)} className="md:hidden text-white/70">
+                <button
+                  onClick={() => setIsSidebarOpen(true)}
+                  className="md:hidden text-white/70"
+                  aria-label="Open sidebar"
+                >
                   <MenuIcon />
                 </button>
                 <div className="flex flex-col">
@@ -559,6 +569,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, lang, tr
               <button
                 onClick={onClose}
                 className="text-white/40 hover:text-white transition-colors"
+                aria-label="Close chat"
               >
                 <XIcon />
               </button>
@@ -616,6 +627,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, lang, tr
                             onClick={() => startReply(msg)}
                             className="p-1.5 text-white/60 hover:text-[#00f2ff] hover:bg-white/5 rounded"
                             title="Reply"
+                            aria-label="Reply to message"
                           >
                             <ReplyIcon width={14} height={14} />
                           </button>
@@ -623,6 +635,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, lang, tr
                             onClick={() => handleCopy(msg.content)}
                             className="p-1.5 text-white/60 hover:text-[#00f2ff] hover:bg-white/5 rounded"
                             title="Copy"
+                            aria-label="Copy message content"
                           >
                             <CopyIcon width={14} height={14} />
                           </button>
@@ -631,6 +644,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, lang, tr
                               onClick={() => startEdit(msg)}
                               className="p-1.5 text-white/60 hover:text-[#00f2ff] hover:bg-white/5 rounded"
                               title="Edit"
+                              aria-label="Edit message"
                             >
                               <EditIcon width={14} height={14} />
                             </button>
@@ -639,6 +653,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, lang, tr
                             onClick={() => handleDeleteMessage(msg.id)}
                             className="p-1.5 text-white/60 hover:text-red-400 hover:bg-white/5 rounded"
                             title="Delete"
+                            aria-label="Delete message"
                           >
                             <TrashIcon width={14} height={14} />
                           </button>
@@ -763,6 +778,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, lang, tr
                   exit={{ opacity: 0, y: 10 }}
                   onClick={() => scrollToBottom(true)}
                   className="absolute bottom-24 right-6 p-3 bg-[#17212b] border border-black/20 rounded-full shadow-xl z-20 text-white/70 hover:text-[#00f2ff] hover:bg-[#232e3c] transition-colors"
+                  aria-label="Scroll to bottom"
                 >
                   <ChevronDown />
                 </motion.button>
@@ -800,6 +816,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, lang, tr
                     <button
                       onClick={cancelAction}
                       className="p-2 hover:bg-white/5 rounded-full text-white/50 hover:text-white flex-shrink-0"
+                      aria-label="Cancel edit or reply"
                     >
                       <XIcon width={16} />
                     </button>
@@ -815,6 +832,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, lang, tr
                   <button
                     type="button"
                     className="p-3 text-white/40 hover:text-white/80 transition-colors"
+                    aria-label="Attach file"
                   >
                     <svg
                       width="24"
@@ -845,6 +863,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, lang, tr
                     <button
                       type="submit"
                       className="p-3 bg-[#2b5278] text-white rounded-full hover:bg-[#366493] transition-colors shadow-lg flex-shrink-0 mb-0.5"
+                      aria-label={editingMessageId ? "Save edits" : "Send message"}
                     >
                       {editingMessageId ? (
                         <CheckIcon width={24} />
@@ -866,6 +885,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, lang, tr
                     <button
                       type="button"
                       className="p-3 text-white/40 hover:text-white/80 transition-colors mb-0.5"
+                      aria-label="Voice input"
                     >
                       <MicIcon className="w-6 h-6" />
                     </button>
