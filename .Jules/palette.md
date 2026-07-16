@@ -1,0 +1,5 @@
+# Palette's Journal - Critical UX/Accessibility Insights
+
+## 2026-07-16 - Contact Form Focus and Screen Reader Accessibility
+**Learning:** For forms that transition to a completely different success state/view, screen reader users and keyboard navigators can lose context when the form fields they were focusing on disappear. Programmatically focusing the success container (with `tabIndex={-1}` and `role="status"`) instantly alerts screen readers to the state transition. Furthermore, when returning to the form (e.g. clicking 'Send Again'), resetting the focus to the first interactive field (e.g., Name input) restores immediate keyboard usability. Connecting labels with inputs via `htmlFor` and prefixed `id`s, alongside standard `autoComplete` attributes, provides the most robust and accessible experience.
+**Action:** When designing state-transitioning forms, use React refs to programmatically shift focus to the success header/container on submission, and back to the first input when resetting, ensuring `tabIndex={-1}` is present on non-interactive focused elements and `autoComplete` tags match standard formats.
