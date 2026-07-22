@@ -1,0 +1,4 @@
+## 2026-07-22 - Programmatic Focus Transitions in Success States
+
+**Learning:** In highly interactive dynamic forms, switching from form input fields to a success overlay without programmatic focus shifting leaves screen readers orphaned and disoriented. Shifting focus programmatically to a localized success container marked with `role="status"` and `aria-live="polite"` ensures that screen readers instantly announce the success state. Likewise, resetting the form must return focus back to the primary form field to preserve a logical keyboard interaction sequence.
+**Action:** Always implement a status-tracking `useRef` comparison in React to shift focus between the success container (using `tabIndex={-1}`) and the first interactive input element, guarding against unwanted autofocus on initial mount.
