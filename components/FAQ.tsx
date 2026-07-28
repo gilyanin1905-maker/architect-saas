@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { FAQ_DATA, UI_TEXT } from "../constants";
-import { XIcon, ChevronDown } from "./Icons";
+import { XIcon } from "./Icons";
 import { Language } from "../types";
 
 interface FAQProps {
@@ -40,6 +40,35 @@ const FAQ: React.FC<FAQProps> = ({ lang }) => {
   const faqItems = FAQ_DATA[lang];
   const t = UI_TEXT[lang].faq;
 
+  const previousActiveElement = useRef<HTMLElement | null>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null); // eslint-disable-line no-undef
+
+  useEffect(() => {
+    if (activeQuestionId) {
+      previousActiveElement.current = document.activeElement as HTMLElement;
+
+      const handleKeyDown = (e: KeyboardEvent) => { // eslint-disable-line no-undef
+        if (e.key === "Escape") {
+          setActiveQuestionId(null);
+        }
+      };
+      window.addEventListener("keydown", handleKeyDown);
+
+      const timer = setTimeout(() => {
+        closeButtonRef.current?.focus();
+      }, 100);
+
+      return () => {
+        window.removeEventListener("keydown", handleKeyDown);
+        clearTimeout(timer);
+        if (previousActiveElement.current) {
+          previousActiveElement.current.focus();
+          previousActiveElement.current = null;
+        }
+      };
+    }
+  }, [activeQuestionId]);
+
   // Find active item for the drawer
   const activeItem = faqItems.find(i => i.id === activeQuestionId);
 
@@ -75,6 +104,8 @@ const FAQ: React.FC<FAQProps> = ({ lang }) => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
               onClick={() => setActiveQuestionId(item.id)}
+              aria-expanded={activeQuestionId === item.id}
+              aria-controls={activeQuestionId === item.id ? "faq-drawer-panel" : undefined}
               className={`
                     group relative p-8 text-left rounded-3xl border transition-all duration-300 h-full flex flex-col justify-between
                     ${
@@ -135,7 +166,13 @@ const FAQ: React.FC<FAQProps> = ({ lang }) => {
                 transition={{ type: "spring", damping: 25, stiffness: 200 }}
                 className="fixed bottom-0 left-0 w-full z-[160] flex justify-center pointer-events-none"
               >
-                <div className="pointer-events-auto w-full max-w-4xl mx-4 mb-4 md:mb-8 bg-[#050816] border border-[#00f2ff]/30 rounded-[32px] overflow-hidden shadow-[0_-20px_80px_rgba(0,0,0,0.8)] relative flex flex-col max-h-[80vh]">
+                <div
+                  id="faq-drawer-panel"
+                  role="dialog"
+                  aria-modal="true"
+                  aria-labelledby="faq-drawer-title"
+                  className="pointer-events-auto w-full max-w-4xl mx-4 mb-4 md:mb-8 bg-[#050816] border border-[#00f2ff]/30 rounded-[32px] overflow-hidden shadow-[0_-20px_80px_rgba(0,0,0,0.8)] relative flex flex-col max-h-[80vh]"
+                >
                   {/* Drawer Header (Terminal Style) */}
                   <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-white/5">
                     <div className="flex items-center gap-3">
@@ -149,6 +186,7 @@ const FAQ: React.FC<FAQProps> = ({ lang }) => {
                       </span>
                     </div>
                     <button
+                      ref={closeButtonRef}
                       onClick={() => setActiveQuestionId(null)}
                       className="p-2 hover:bg-white/10 rounded-full transition-colors group"
                     >
@@ -162,7 +200,7 @@ const FAQ: React.FC<FAQProps> = ({ lang }) => {
                   {/* Drawer Content */}
                   <div className="p-6 md:p-10 overflow-y-auto">
                     <div className="mb-6">
-                      <h3 className="text-xl md:text-2xl font-bold text-[#00f2ff] mb-2 font-display">
+                      <h3 id="faq-drawer-title" className="text-xl md:text-2xl font-bold text-[#00f2ff] mb-2 font-display">
                         {`> ${activeItem.question}`}
                       </h3>
                       <div className="w-full h-[1px] bg-gradient-to-r from-[#00f2ff]/50 to-transparent"></div>
