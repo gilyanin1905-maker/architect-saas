@@ -1,0 +1,3 @@
+## 2026-07-15 - FAQ Drawer Focus Management and ARIA Dialog Integration
+**Learning:** Terminal-style drawers and custom modals in snap-scroll layouts lack default keyboard accessibility and screen reader support. By saving the document.activeElement on open and restoring it on close, and by applying role="dialog", aria-modal="true", and aria-labelledby with matching target IDs, we ensure full screen reader compliance and seamless keyboard navigation.
+**Action:** Always capture the trigger button reference to restore focus, set initial focus to the primary close or action button inside the drawer after a small timeout, and integrate standard ARIA role="dialog" relationships.
