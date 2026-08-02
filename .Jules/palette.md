@@ -1,0 +1,3 @@
+## 2026-07-28 - Contact Form Accessibility & Micro-UX
+**Learning:** Standard React inputs and labels without explicit matching `id`/`htmlFor` identifiers fail basic WCAG accessibility standards. To ensure optimal screen-reader compatibility and focus restoration in single-page apps (SPAs), success message containers must possess `role="status"` and `tabIndex={-1}` and be programmatically focused upon successful submission.
+**Action:** Always connect `<label>` and `<input>` components via explicit prefixed `htmlFor`/`id` pairs, implement modern autocomplete fields, and use programmatic refs to shift keyboard focus to success containers on dynamic state transitions.
