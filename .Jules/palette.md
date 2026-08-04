@@ -1,0 +1,3 @@
+## 2026-07-25 - Modal and Drawer Accessibility Core Pattern
+**Learning:** Overlays, modals, and slide-out drawers must handle screen reader focus and keyboard navigation natively to prevent assistive technologies from being trapped or losing context. Unmanaged overlays fail basic accessibility checks because focus remains on the triggering element or is lost entirely when the overlay mounts.
+**Action:** Always capture `document.activeElement` when an overlay mounts and restore focus to it upon unmounting. Automatically move focus to the primary closing control inside the modal using a small delay (e.g., 100ms) to ensure the DOM has fully rendered, and register a keydown listener for the `Escape` key to allow fast, standardized keyboard dismissing.

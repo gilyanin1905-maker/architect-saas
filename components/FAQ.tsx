@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+/* eslint-disable no-undef */
+import React, { useState, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { FAQ_DATA, UI_TEXT } from "../constants";
-import { XIcon, ChevronDown } from "./Icons";
+import { XIcon } from "./Icons";
 import { Language } from "../types";
 
 interface FAQProps {
@@ -42,6 +43,35 @@ const FAQ: React.FC<FAQProps> = ({ lang }) => {
 
   // Find active item for the drawer
   const activeItem = faqItems.find(i => i.id === activeQuestionId);
+
+  const lastActiveElementRef = useRef<HTMLElement | null>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (activeQuestionId !== null) {
+      lastActiveElementRef.current = document.activeElement as HTMLElement;
+      const timer = setTimeout(() => {
+        closeButtonRef.current?.focus();
+      }, 100);
+
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === "Escape") {
+          setActiveQuestionId(null);
+        }
+      };
+      window.addEventListener("keydown", handleKeyDown);
+
+      return () => {
+        clearTimeout(timer);
+        window.removeEventListener("keydown", handleKeyDown);
+      };
+    } else {
+      if (lastActiveElementRef.current) {
+        lastActiveElementRef.current.focus();
+        lastActiveElementRef.current = null;
+      }
+    }
+  }, [activeQuestionId]);
 
   return (
     <section id="faq" className="py-24 relative" itemScope itemType="https://schema.org/FAQPage">
@@ -149,6 +179,7 @@ const FAQ: React.FC<FAQProps> = ({ lang }) => {
                       </span>
                     </div>
                     <button
+                      ref={closeButtonRef}
                       onClick={() => setActiveQuestionId(null)}
                       className="p-2 hover:bg-white/10 rounded-full transition-colors group"
                     >

@@ -1,4 +1,5 @@
-import React from "react";
+/* eslint-disable no-undef */
+import React, { useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { BLOG_DATA } from "../constants";
 import { Language } from "../types";
@@ -12,6 +13,35 @@ interface BlogModalProps {
 
 const BlogModal: React.FC<BlogModalProps> = ({ isOpen, onClose, lang }) => {
   const posts = BLOG_DATA[lang];
+
+  const lastActiveElementRef = useRef<HTMLElement | null>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (isOpen) {
+      lastActiveElementRef.current = document.activeElement as HTMLElement;
+      const timer = setTimeout(() => {
+        closeButtonRef.current?.focus();
+      }, 100);
+
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === "Escape") {
+          onClose();
+        }
+      };
+      window.addEventListener("keydown", handleKeyDown);
+
+      return () => {
+        clearTimeout(timer);
+        window.removeEventListener("keydown", handleKeyDown);
+      };
+    } else {
+      if (lastActiveElementRef.current) {
+        lastActiveElementRef.current.focus();
+        lastActiveElementRef.current = null;
+      }
+    }
+  }, [isOpen, onClose]);
 
   return (
     <AnimatePresence>
@@ -66,6 +96,7 @@ const BlogModal: React.FC<BlogModalProps> = ({ isOpen, onClose, lang }) => {
                   </div>
                 </div>
                 <button
+                  ref={closeButtonRef}
                   onClick={onClose}
                   className="w-12 h-12 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors text-white [.light_&]:text-black"
                 >
