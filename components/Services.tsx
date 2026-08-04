@@ -1,8 +1,9 @@
+/* eslint-disable no-undef */
 import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { SERVICES_DATA, UI_TEXT } from "../constants";
 import { Language } from "../types";
-import { TelegramIcon, VKIcon, BotIcon, XIcon } from "./Icons";
+import { TelegramIcon, BotIcon, XIcon } from "./Icons";
 
 interface ServicesProps {
   lang: Language;
@@ -16,6 +17,35 @@ const BuyModal: React.FC<{ isOpen: boolean; onClose: () => void; lang: Language 
   lang,
 }) => {
   const t = UI_TEXT[lang].services;
+
+  const lastActiveElementRef = useRef<HTMLElement | null>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (isOpen) {
+      lastActiveElementRef.current = document.activeElement as HTMLElement;
+      const timer = setTimeout(() => {
+        closeButtonRef.current?.focus();
+      }, 100);
+
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === "Escape") {
+          onClose();
+        }
+      };
+      window.addEventListener("keydown", handleKeyDown);
+
+      return () => {
+        clearTimeout(timer);
+        window.removeEventListener("keydown", handleKeyDown);
+      };
+    } else {
+      if (lastActiveElementRef.current) {
+        lastActiveElementRef.current.focus();
+        lastActiveElementRef.current = null;
+      }
+    }
+  }, [isOpen, onClose]);
 
   return (
     <AnimatePresence>
@@ -36,6 +66,7 @@ const BuyModal: React.FC<{ isOpen: boolean; onClose: () => void; lang: Language 
           >
             <div className="bg-[#0e1621] border border-white/10 rounded-3xl p-6 shadow-2xl relative overflow-hidden">
               <button
+                ref={closeButtonRef}
                 onClick={onClose}
                 className="absolute top-4 right-4 text-white/40 hover:text-white"
               >
