@@ -152,12 +152,17 @@ const ContactForm: React.FC<ContactFormProps> = ({ lang }) => {
               <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
                 <div className="grid md:grid-cols-2 gap-4 md:gap-6">
                   <div className="space-y-2">
-                    <label className="text-xs font-bold text-white/40 uppercase ml-1">
+                    <label
+                      htmlFor="contact-name"
+                      className="text-xs font-bold text-white/40 uppercase ml-1"
+                    >
                       {t.name}
                     </label>
                     <input
+                      id="contact-name"
                       type="text"
                       required
+                      autoComplete="name"
                       value={formData.name}
                       onChange={e => setFormData({ ...formData, name: e.target.value })}
                       placeholder={t.name}
@@ -165,11 +170,16 @@ const ContactForm: React.FC<ContactFormProps> = ({ lang }) => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-xs font-bold text-white/40 uppercase ml-1">
+                    <label
+                      htmlFor="contact-company"
+                      className="text-xs font-bold text-white/40 uppercase ml-1"
+                    >
                       {t.company}
                     </label>
                     <input
+                      id="contact-company"
                       type="text"
+                      autoComplete="organization"
                       value={formData.company}
                       onChange={e => setFormData({ ...formData, company: e.target.value })}
                       placeholder={t.company}
@@ -180,12 +190,17 @@ const ContactForm: React.FC<ContactFormProps> = ({ lang }) => {
 
                 <div className="grid md:grid-cols-2 gap-4 md:gap-6">
                   <div className="space-y-2">
-                    <label className="text-xs font-bold text-white/40 uppercase ml-1">
+                    <label
+                      htmlFor="contact-email"
+                      className="text-xs font-bold text-white/40 uppercase ml-1"
+                    >
                       {t.email}
                     </label>
                     <input
+                      id="contact-email"
                       type="email"
                       required
+                      autoComplete="email"
                       value={formData.email}
                       onChange={e => setFormData({ ...formData, email: e.target.value })}
                       placeholder="example@mail.ru"
@@ -193,11 +208,16 @@ const ContactForm: React.FC<ContactFormProps> = ({ lang }) => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-xs font-bold text-white/40 uppercase ml-1">
+                    <label
+                      htmlFor="contact-telegram"
+                      className="text-xs font-bold text-white/40 uppercase ml-1"
+                    >
                       {t.telegram}
                     </label>
                     <input
+                      id="contact-telegram"
                       type="text"
+                      autoComplete="username"
                       value={formData.telegram}
                       onChange={e => setFormData({ ...formData, telegram: e.target.value })}
                       placeholder="@username"
@@ -207,10 +227,14 @@ const ContactForm: React.FC<ContactFormProps> = ({ lang }) => {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-xs font-bold text-white/40 uppercase ml-1">
+                  <label
+                    htmlFor="contact-message"
+                    className="text-xs font-bold text-white/40 uppercase ml-1"
+                  >
                     {t.message}
                   </label>
                   <textarea
+                    id="contact-message"
                     rows={4}
                     required
                     value={formData.message}
