@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { FAQ_DATA, UI_TEXT } from "../constants";
-import { XIcon, ChevronDown } from "./Icons";
+import { XIcon } from "./Icons";
 import { Language } from "../types";
 
 interface FAQProps {
@@ -43,6 +43,37 @@ const FAQ: React.FC<FAQProps> = ({ lang }) => {
   // Find active item for the drawer
   const activeItem = faqItems.find(i => i.id === activeQuestionId);
 
+  const previousFocusRef = useRef<HTMLElement | null>(null);
+  // eslint-disable-next-line no-undef
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
+
+  useEffect(() => {
+    if (activeQuestionId !== null) {
+      previousFocusRef.current = document.activeElement as HTMLElement;
+      const timer = setTimeout(() => {
+        closeButtonRef.current?.focus();
+      }, 100);
+
+      // eslint-disable-next-line no-undef
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === "Escape") {
+          setActiveQuestionId(null);
+        }
+      };
+      window.addEventListener("keydown", handleKeyDown);
+
+      return () => {
+        clearTimeout(timer);
+        window.removeEventListener("keydown", handleKeyDown);
+      };
+    } else {
+      if (previousFocusRef.current) {
+        previousFocusRef.current.focus();
+        previousFocusRef.current = null;
+      }
+    }
+  }, [activeQuestionId]);
+
   return (
     <section id="faq" className="py-24 relative" itemScope itemType="https://schema.org/FAQPage">
       <div className="container mx-auto px-6">
@@ -77,6 +108,7 @@ const FAQ: React.FC<FAQProps> = ({ lang }) => {
               onClick={() => setActiveQuestionId(item.id)}
               className={`
                     group relative p-8 text-left rounded-3xl border transition-all duration-300 h-full flex flex-col justify-between
+                    focus-visible:ring-2 focus-visible:ring-[#00f2ff] focus-visible:border-transparent focus:outline-none
                     ${
                       activeQuestionId === item.id
                         ? "bg-[#00f2ff]/10 border-[#00f2ff] shadow-[0_0_30px_rgba(0,242,255,0.2)]"
@@ -149,8 +181,9 @@ const FAQ: React.FC<FAQProps> = ({ lang }) => {
                       </span>
                     </div>
                     <button
+                      ref={closeButtonRef}
                       onClick={() => setActiveQuestionId(null)}
-                      className="p-2 hover:bg-white/10 rounded-full transition-colors group"
+                      className="p-2 hover:bg-white/10 rounded-full transition-colors group focus-visible:ring-2 focus-visible:ring-[#00f2ff] focus:outline-none"
                     >
                       <span className="sr-only">{t.close}</span>
                       <div className="group-hover:rotate-90 transition-transform duration-300">
@@ -175,7 +208,7 @@ const FAQ: React.FC<FAQProps> = ({ lang }) => {
                     <div className="mt-6 flex justify-end">
                       <button
                         onClick={() => setActiveQuestionId(null)}
-                        className="px-6 py-3 bg-white/10 hover:bg-white/20 rounded-lg text-xs font-bold uppercase tracking-widest text-white transition-colors"
+                        className="px-6 py-3 bg-white/10 hover:bg-white/20 rounded-lg text-xs font-bold uppercase tracking-widest text-white transition-colors focus-visible:ring-2 focus-visible:ring-[#00f2ff] focus:outline-none"
                       >
                         {t.close} [ESC]
                       </button>
