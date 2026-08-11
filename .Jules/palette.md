@@ -1,0 +1,3 @@
+## 2026-07-02 - Keyboard Accessibility and Focus Recovery in Modal Drawers
+**Learning:** Full page overlays and slide-out drawer menus must capture keyboard focus and listen to the Escape key to ensure they are accessible to screen reader and keyboard-only users. Without programmatic focus recovery, closing a modal resets user focus back to the top of the body element, forcing the user to tab through the entire layout again.
+**Action:** Always capture the active triggering element via a `useRef` on open, shift focus to the modal's primary interactive or close element, listen for the 'Escape' key globally, and restore focus to the captured triggering element when the modal or drawer closes.
