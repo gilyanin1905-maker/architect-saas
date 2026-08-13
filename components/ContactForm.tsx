@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { ContactFormData, Language } from "../types";
 import { UI_TEXT } from "../constants";
 import { BotIcon, TelegramIcon, VKIcon } from "./Icons";
@@ -17,6 +17,26 @@ const ContactForm: React.FC<ContactFormProps> = ({ lang }) => {
   });
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const t = UI_TEXT[lang].contact;
+
+  // Refs for focus management
+  const successContainerRef = useRef<HTMLDivElement>(null);
+  /* eslint-disable no-undef */
+  const firstInputRef = useRef<HTMLInputElement>(null);
+  /* eslint-enable no-undef */
+  const prevStatusRef = useRef<"idle" | "loading" | "success" | "error">("idle");
+
+  useEffect(() => {
+    if (status === "success" && successContainerRef.current) {
+      successContainerRef.current.focus();
+    } else if (
+      status === "idle" &&
+      prevStatusRef.current === "success" &&
+      firstInputRef.current
+    ) {
+      firstInputRef.current.focus();
+    }
+    prevStatusRef.current = status;
+  }, [status]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -126,7 +146,13 @@ const ContactForm: React.FC<ContactFormProps> = ({ lang }) => {
 
           <div className="glass p-6 md:p-10 lg:p-12 rounded-[32px] md:rounded-[40px] relative">
             {status === "success" ? (
-              <div className="h-full flex flex-col items-center justify-center text-center space-y-6 animate-[fadeIn_0.5s_ease]">
+              <div
+                ref={successContainerRef}
+                tabIndex={-1}
+                role="status"
+                aria-live="polite"
+                className="h-full flex flex-col items-center justify-center text-center space-y-6 animate-[fadeIn_0.5s_ease] focus:outline-none"
+              >
                 <div className="w-20 h-20 bg-green-500/20 text-green-500 rounded-full flex items-center justify-center">
                   <svg
                     width="40"
@@ -152,12 +178,15 @@ const ContactForm: React.FC<ContactFormProps> = ({ lang }) => {
               <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
                 <div className="grid md:grid-cols-2 gap-4 md:gap-6">
                   <div className="space-y-2">
-                    <label className="text-xs font-bold text-white/40 uppercase ml-1">
+                    <label htmlFor="contact-name" className="text-xs font-bold text-white/40 uppercase ml-1">
                       {t.name}
                     </label>
                     <input
+                      ref={firstInputRef}
+                      id="contact-name"
                       type="text"
                       required
+                      autoComplete="name"
                       value={formData.name}
                       onChange={e => setFormData({ ...formData, name: e.target.value })}
                       placeholder={t.name}
@@ -165,11 +194,13 @@ const ContactForm: React.FC<ContactFormProps> = ({ lang }) => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-xs font-bold text-white/40 uppercase ml-1">
+                    <label htmlFor="contact-company" className="text-xs font-bold text-white/40 uppercase ml-1">
                       {t.company}
                     </label>
                     <input
+                      id="contact-company"
                       type="text"
+                      autoComplete="organization"
                       value={formData.company}
                       onChange={e => setFormData({ ...formData, company: e.target.value })}
                       placeholder={t.company}
@@ -180,12 +211,14 @@ const ContactForm: React.FC<ContactFormProps> = ({ lang }) => {
 
                 <div className="grid md:grid-cols-2 gap-4 md:gap-6">
                   <div className="space-y-2">
-                    <label className="text-xs font-bold text-white/40 uppercase ml-1">
+                    <label htmlFor="contact-email" className="text-xs font-bold text-white/40 uppercase ml-1">
                       {t.email}
                     </label>
                     <input
+                      id="contact-email"
                       type="email"
                       required
+                      autoComplete="email"
                       value={formData.email}
                       onChange={e => setFormData({ ...formData, email: e.target.value })}
                       placeholder="example@mail.ru"
@@ -193,11 +226,13 @@ const ContactForm: React.FC<ContactFormProps> = ({ lang }) => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-xs font-bold text-white/40 uppercase ml-1">
+                    <label htmlFor="contact-telegram" className="text-xs font-bold text-white/40 uppercase ml-1">
                       {t.telegram}
                     </label>
                     <input
+                      id="contact-telegram"
                       type="text"
+                      autoComplete="username"
                       value={formData.telegram}
                       onChange={e => setFormData({ ...formData, telegram: e.target.value })}
                       placeholder="@username"
@@ -207,10 +242,11 @@ const ContactForm: React.FC<ContactFormProps> = ({ lang }) => {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-xs font-bold text-white/40 uppercase ml-1">
+                  <label htmlFor="contact-message" className="text-xs font-bold text-white/40 uppercase ml-1">
                     {t.message}
                   </label>
                   <textarea
+                    id="contact-message"
                     rows={4}
                     required
                     value={formData.message}
