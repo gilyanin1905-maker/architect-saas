@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { FAQ_DATA, UI_TEXT } from "../constants";
-import { XIcon, ChevronDown } from "./Icons";
+import { XIcon } from "./Icons";
 import { Language } from "../types";
 
 interface FAQProps {
@@ -40,6 +40,30 @@ const FAQ: React.FC<FAQProps> = ({ lang }) => {
   const faqItems = FAQ_DATA[lang];
   const t = UI_TEXT[lang].faq;
 
+  // eslint-disable-next-line no-undef
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  // eslint-disable-next-line no-undef
+  const triggerRefs = useRef<Record<number, HTMLButtonElement | null>>({});
+  const lastActiveIdRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (activeQuestionId !== null) {
+      lastActiveIdRef.current = activeQuestionId;
+      // eslint-disable-next-line no-undef
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === "Escape") setActiveQuestionId(null);
+      };
+      window.addEventListener("keydown", handleKeyDown);
+      const timer = setTimeout(() => closeButtonRef.current?.focus(), 50);
+      return () => {
+        window.removeEventListener("keydown", handleKeyDown);
+        clearTimeout(timer);
+      };
+    } else if (lastActiveIdRef.current !== null) {
+      triggerRefs.current[lastActiveIdRef.current]?.focus();
+    }
+  }, [activeQuestionId]);
+
   // Find active item for the drawer
   const activeItem = faqItems.find(i => i.id === activeQuestionId);
 
@@ -68,6 +92,11 @@ const FAQ: React.FC<FAQProps> = ({ lang }) => {
           {faqItems.map((item, index) => (
             <motion.button
               key={item.id}
+              ref={el => {
+                triggerRefs.current[item.id] = el;
+              }}
+              aria-expanded={activeQuestionId === item.id}
+              aria-controls={activeQuestionId === item.id ? "faq-drawer-panel" : undefined}
               itemScope
               itemProp="mainEntity"
               itemType="https://schema.org/Question"
@@ -129,6 +158,10 @@ const FAQ: React.FC<FAQProps> = ({ lang }) => {
 
               {/* Drawer Panel */}
               <motion.div
+                id="faq-drawer-panel"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby={`faq-question-title-${activeItem.id}`}
                 initial={{ y: "100%" }}
                 animate={{ y: 0 }}
                 exit={{ y: "100%" }}
@@ -149,8 +182,9 @@ const FAQ: React.FC<FAQProps> = ({ lang }) => {
                       </span>
                     </div>
                     <button
+                      ref={closeButtonRef}
                       onClick={() => setActiveQuestionId(null)}
-                      className="p-2 hover:bg-white/10 rounded-full transition-colors group"
+                      className="p-2 hover:bg-white/10 rounded-full transition-colors group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00f2ff]"
                     >
                       <span className="sr-only">{t.close}</span>
                       <div className="group-hover:rotate-90 transition-transform duration-300">
@@ -162,7 +196,7 @@ const FAQ: React.FC<FAQProps> = ({ lang }) => {
                   {/* Drawer Content */}
                   <div className="p-6 md:p-10 overflow-y-auto">
                     <div className="mb-6">
-                      <h3 className="text-xl md:text-2xl font-bold text-[#00f2ff] mb-2 font-display">
+                      <h3 id={`faq-question-title-${activeItem.id}`} className="text-xl md:text-2xl font-bold text-[#00f2ff] mb-2 font-display">
                         {`> ${activeItem.question}`}
                       </h3>
                       <div className="w-full h-[1px] bg-gradient-to-r from-[#00f2ff]/50 to-transparent"></div>
