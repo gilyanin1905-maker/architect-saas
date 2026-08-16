@@ -1,0 +1,3 @@
+## 2026-07-20 - FAQ Drawer Focus Management and ARIA Dialog Enhancements
+**Learning:** Animated drawer/modal panels rendered within `AnimatePresence` require delaying focus shifts (e.g. via `setTimeout` or animation lifecycle callbacks) until the modal element and its close trigger are mounted in the DOM. Preserving the previously active element in a `useRef` allows seamlessly restoring focus back to the triggering accordion button upon closing.
+**Action:** Always capture `document.activeElement` before opening dynamic modal drawers, set focus to the close button inside a mounted effect/timeout, and return focus to the trigger button when closing.
