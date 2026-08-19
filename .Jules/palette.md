@@ -1,0 +1,4 @@
+## 2026-07-01 - Modal Dialog Accessibility and Non-Semantic Interactive Elements
+
+**Learning:** Interactive 3D/canvas visual containers used as triggers for modals often lack keyboard navigation (`tabIndex`, `role`, keyboard event listeners), leaving screen reader and keyboard-only users unable to discover or trigger modal feeds. Furthermore, custom modals missing standard ARIA attributes (`role="dialog"`, `aria-modal="true"`, `aria-labelledby`), focus restoration, and Escape key listeners disrupt accessibility flow and keyboard focus context.
+**Action:** Always wrap interactive custom trigger elements with appropriate ARIA attributes (`role="button"`, `tabIndex={0}`, `aria-label`, keydown handlers for Enter/Space) and ensure custom modal overlays implement accessible dialog semantics with focus capture/restoration and Escape key handling.
