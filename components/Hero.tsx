@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Language } from '../types';
 import { UI_TEXT } from '../constants';
 import { BotIcon, VKIcon } from './Icons';
@@ -97,8 +97,19 @@ const Hero: React.FC<HeroProps> = ({ lang }) => {
         >
           {/* INTERACTIVE SPHERE WRAPPER */}
           <div 
-             className="relative h-[160px] sm:h-[300px] lg:h-[400px] w-full flex items-center justify-center perspective-[1000px] cursor-pointer group"
+             role="button"
+             tabIndex={0}
+             aria-label={lang === Language.RU ? "Открыть новостную ленту Architect" : "Open Architect Feed"}
+             aria-expanded={isBlogOpen}
+             aria-haspopup="dialog"
+             className="relative h-[160px] sm:h-[300px] lg:h-[400px] w-full flex items-center justify-center perspective-[1000px] cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00f2ff] rounded-3xl"
              onClick={() => setIsBlogOpen(true)}
+             onKeyDown={(e) => {
+               if (e.key === 'Enter' || e.key === ' ') {
+                 e.preventDefault();
+                 setIsBlogOpen(true);
+               }
+             }}
           >
             {/* Ambient Glow */}
             <div className="absolute inset-0 bg-gradient-to-tr from-[#7b2ff7]/20 to-[#00f2ff]/10 rounded-full blur-[40px] md:blur-[100px] animate-pulse pointer-events-none"></div>

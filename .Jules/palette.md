@@ -1,0 +1,4 @@
+## 2026-07-15 - Interactive Canvas / 3D Element Accessibility & Dialog Focus Management
+
+**Learning:** Non-semantic interactive elements embedded in 3D canvas/particle hero sections (e.g., interactive orbital spheres) are often completely hidden from keyboard and screen reader users unless explicitly configured with `role="button"`, `tabIndex={0}`, keyboard handlers, and `aria-haspopup="dialog"`. Additionally, modals triggered by these elements require strict focus trapping, focus restoration on close, and `Escape` key handling to meet WCAG dialog patterns.
+**Action:** Always complement pointer click handlers on canvas/motion elements with standard keyboard event listeners (`Enter`/`Space`), dynamic localized `aria-label`s, `role="button"`, and restore focus to the trigger element when closing modals.
