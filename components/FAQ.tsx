@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { FAQ_DATA, UI_TEXT } from "../constants";
-import { XIcon, ChevronDown } from "./Icons";
+import { XIcon } from "./Icons";
 import { Language } from "../types";
 
 interface FAQProps {
@@ -40,6 +40,37 @@ const FAQ: React.FC<FAQProps> = ({ lang }) => {
   const faqItems = FAQ_DATA[lang];
   const t = UI_TEXT[lang].faq;
 
+  // eslint-disable-next-line no-undef
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
+  const previousActiveElementRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    if (activeQuestionId !== null) {
+      previousActiveElementRef.current = document.activeElement as HTMLElement;
+
+      // eslint-disable-next-line no-undef
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === "Escape") {
+          setActiveQuestionId(null);
+        }
+      };
+
+      window.addEventListener("keydown", handleKeyDown);
+
+      const timer = setTimeout(() => {
+        closeButtonRef.current?.focus();
+      }, 100);
+
+      return () => {
+        window.removeEventListener("keydown", handleKeyDown);
+        clearTimeout(timer);
+      };
+    } else if (previousActiveElementRef.current) {
+      previousActiveElementRef.current.focus();
+      previousActiveElementRef.current = null;
+    }
+  }, [activeQuestionId]);
+
   // Find active item for the drawer
   const activeItem = faqItems.find(i => i.id === activeQuestionId);
 
@@ -75,6 +106,8 @@ const FAQ: React.FC<FAQProps> = ({ lang }) => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
               onClick={() => setActiveQuestionId(item.id)}
+              aria-expanded={activeQuestionId === item.id}
+              aria-controls={`faq-drawer-${item.id}`}
               className={`
                     group relative p-8 text-left rounded-3xl border transition-all duration-300 h-full flex flex-col justify-between
                     ${
@@ -129,6 +162,10 @@ const FAQ: React.FC<FAQProps> = ({ lang }) => {
 
               {/* Drawer Panel */}
               <motion.div
+                id={`faq-drawer-${activeItem.id}`}
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby={`faq-title-${activeItem.id}`}
                 initial={{ y: "100%" }}
                 animate={{ y: 0 }}
                 exit={{ y: "100%" }}
@@ -149,8 +186,10 @@ const FAQ: React.FC<FAQProps> = ({ lang }) => {
                       </span>
                     </div>
                     <button
+                      ref={closeButtonRef}
                       onClick={() => setActiveQuestionId(null)}
                       className="p-2 hover:bg-white/10 rounded-full transition-colors group"
+                      aria-label={t.close}
                     >
                       <span className="sr-only">{t.close}</span>
                       <div className="group-hover:rotate-90 transition-transform duration-300">
@@ -162,7 +201,10 @@ const FAQ: React.FC<FAQProps> = ({ lang }) => {
                   {/* Drawer Content */}
                   <div className="p-6 md:p-10 overflow-y-auto">
                     <div className="mb-6">
-                      <h3 className="text-xl md:text-2xl font-bold text-[#00f2ff] mb-2 font-display">
+                      <h3
+                        id={`faq-title-${activeItem.id}`}
+                        className="text-xl md:text-2xl font-bold text-[#00f2ff] mb-2 font-display"
+                      >
                         {`> ${activeItem.question}`}
                       </h3>
                       <div className="w-full h-[1px] bg-gradient-to-r from-[#00f2ff]/50 to-transparent"></div>

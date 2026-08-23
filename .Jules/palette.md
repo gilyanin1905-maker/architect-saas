@@ -1,0 +1,3 @@
+## 2026-07-28 - Focus Management and Escape Key handling for Modal Drawers
+**Learning:** Drawers and full-screen overlay components in React without dedicated accessibility libraries lack natural dialog traits (`role="dialog"`, `aria-modal="true"`), proper keyboard focus capture, and `Escape` key dismissal. Capturing `document.activeElement` on open and moving focus back on close ensures keyboard and screen reader users maintain context.
+**Action:** Always capture `previousActiveElementRef` upon opening overlay/drawer containers and listen for `Escape` key events to restore focus back to the triggering element.
