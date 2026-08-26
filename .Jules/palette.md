@@ -1,0 +1,3 @@
+## 2026-07-01 - FAQ Bottom Drawer Keyboard Accessibility & Focus Management
+**Learning:** Animated bottom drawers and popovers (e.g. FAQ detail drawer) displaying dismissal text like `[ESC]` require explicit `keydown` event listeners, ARIA dialog roles (`role="dialog"`, `aria-modal="true"`, `aria-labelledby`), auto-focusing on the primary close action when opened, and restoring focus back to the triggering element on close.
+**Action:** When implementing modal/drawer panels with Framer Motion, capture `triggerRef` on trigger click, auto-focus the close button after mounting, bind the `Escape` key to the `handleClose` function, and return focus to `triggerRef` on dismissal.
