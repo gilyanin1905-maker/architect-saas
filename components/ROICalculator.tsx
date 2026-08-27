@@ -127,7 +127,10 @@ const ROICalculator: React.FC<ROICalculatorProps> = ({ lang }) => {
               <div className="space-y-6 md:space-y-8 mb-8 relative z-10">
                 <div>
                   <div className="flex justify-between mb-2 md:mb-4">
-                    <label className="text-xs font-bold text-white/40 uppercase tracking-widest">
+                    <label
+                      htmlFor="roi-requests-input"
+                      className="text-xs font-bold text-white/40 uppercase tracking-widest"
+                    >
                       {t.requestsLabel}
                     </label>
                     <span className="text-[#00f2ff] font-mono font-bold">
@@ -135,6 +138,7 @@ const ROICalculator: React.FC<ROICalculatorProps> = ({ lang }) => {
                     </span>
                   </div>
                   <input
+                    id="roi-requests-input"
                     type="range"
                     min="100"
                     max="10000"
@@ -147,12 +151,16 @@ const ROICalculator: React.FC<ROICalculatorProps> = ({ lang }) => {
 
                 <div>
                   <div className="flex justify-between mb-2 md:mb-4">
-                    <label className="text-xs font-bold text-white/40 uppercase tracking-widest">
+                    <label
+                      htmlFor="roi-tokens-input"
+                      className="text-xs font-bold text-white/40 uppercase tracking-widest"
+                    >
                       {t.tokensLabel}
                     </label>
                     <span className="text-[#00f2ff] font-mono font-bold">{tokens}</span>
                   </div>
                   <input
+                    id="roi-tokens-input"
                     type="range"
                     min="100"
                     max="2000"
@@ -164,7 +172,11 @@ const ROICalculator: React.FC<ROICalculatorProps> = ({ lang }) => {
                 </div>
               </div>
 
-              <div className="text-center mb-6 md:mb-10 relative z-10">
+              <div
+                className="text-center mb-6 md:mb-10 relative z-10"
+                aria-live="polite"
+                aria-atomic="true"
+              >
                 <div className="text-[9px] md:text-[10px] font-bold text-white/30 uppercase tracking-[4px] mb-2">
                   {t.monthlySavings}
                 </div>
