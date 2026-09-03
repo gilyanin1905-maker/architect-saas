@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { BLOG_DATA } from "../constants";
+import { BLOG_DATA, UI_TEXT } from "../constants";
 import { Language } from "../types";
 import { XIcon } from "./Icons";
 
@@ -12,6 +12,36 @@ interface BlogModalProps {
 
 const BlogModal: React.FC<BlogModalProps> = ({ isOpen, onClose, lang }) => {
   const posts = BLOG_DATA[lang];
+  // eslint-disable-next-line no-undef
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    if (isOpen) {
+      previousFocusRef.current = document.activeElement as HTMLElement;
+      const timer = setTimeout(() => {
+        closeButtonRef.current?.focus();
+      }, 100);
+
+      // eslint-disable-next-line no-undef
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === "Escape") {
+          onClose();
+        }
+      };
+
+      window.addEventListener("keydown", handleKeyDown);
+      return () => {
+        clearTimeout(timer);
+        window.removeEventListener("keydown", handleKeyDown);
+        if (previousFocusRef.current) {
+          previousFocusRef.current.focus();
+        }
+      };
+    }
+  }, [isOpen, onClose]);
+
+  const closeLabel = UI_TEXT[lang]?.faq?.close || (lang === Language.RU ? "Закрыть" : "Close");
 
   return (
     <AnimatePresence>
@@ -35,6 +65,9 @@ const BlogModal: React.FC<BlogModalProps> = ({ isOpen, onClose, lang }) => {
             className="fixed inset-0 pointer-events-none flex items-center justify-center z-[201] p-4 md:p-10"
           >
             <div
+              role="dialog"
+              aria-modal="true"
+              aria-label="Architect Feed"
               className="pointer-events-auto w-full max-w-4xl h-[80vh] bg-[#050816] [.light_&]:bg-white border border-white/10 rounded-[40px] shadow-2xl overflow-hidden flex flex-col relative"
               onClick={e => e.stopPropagation()}
             >
@@ -66,8 +99,10 @@ const BlogModal: React.FC<BlogModalProps> = ({ isOpen, onClose, lang }) => {
                   </div>
                 </div>
                 <button
+                  ref={closeButtonRef}
                   onClick={onClose}
-                  className="w-12 h-12 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors text-white [.light_&]:text-black"
+                  aria-label={closeLabel}
+                  className="w-12 h-12 rounded-full bg-white/5 hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-[#00f2ff] flex items-center justify-center transition-colors text-white [.light_&]:text-black"
                 >
                   <XIcon />
                 </button>
