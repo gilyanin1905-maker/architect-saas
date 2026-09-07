@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { FAQ_DATA, UI_TEXT } from "../constants";
-import { XIcon, ChevronDown } from "./Icons";
+import { XIcon } from "./Icons";
 import { Language } from "../types";
 
 interface FAQProps {
@@ -39,9 +39,44 @@ const FAQ: React.FC<FAQProps> = ({ lang }) => {
   const [activeQuestionId, setActiveQuestionId] = useState<number | null>(null);
   const faqItems = FAQ_DATA[lang];
   const t = UI_TEXT[lang].faq;
+  /* eslint-disable no-undef */
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
 
   // Find active item for the drawer
   const activeItem = faqItems.find(i => i.id === activeQuestionId);
+
+  const handleOpenDrawer = (id: number) => {
+    previousFocusRef.current = document.activeElement as HTMLElement;
+    setActiveQuestionId(id);
+  };
+
+  const handleCloseDrawer = () => {
+    setActiveQuestionId(null);
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && activeQuestionId !== null) {
+        handleCloseDrawer();
+      }
+    };
+    /* eslint-enable no-undef */
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [activeQuestionId]);
+
+  useEffect(() => {
+    if (activeQuestionId !== null) {
+      const timer = setTimeout(() => {
+        closeButtonRef.current?.focus();
+      }, 100);
+      return () => clearTimeout(timer);
+    } else if (previousFocusRef.current) {
+      previousFocusRef.current.focus();
+      previousFocusRef.current = null;
+    }
+  }, [activeQuestionId]);
 
   return (
     <section id="faq" className="py-24 relative" itemScope itemType="https://schema.org/FAQPage">
@@ -74,7 +109,9 @@ const FAQ: React.FC<FAQProps> = ({ lang }) => {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              onClick={() => setActiveQuestionId(item.id)}
+              onClick={() => handleOpenDrawer(item.id)}
+              aria-expanded={activeQuestionId === item.id}
+              aria-controls={`faq-drawer-${item.id}`}
               className={`
                     group relative p-8 text-left rounded-3xl border transition-all duration-300 h-full flex flex-col justify-between
                     ${
@@ -123,7 +160,7 @@ const FAQ: React.FC<FAQProps> = ({ lang }) => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                onClick={() => setActiveQuestionId(null)}
+                onClick={handleCloseDrawer}
                 className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[150]"
               />
 
@@ -135,7 +172,13 @@ const FAQ: React.FC<FAQProps> = ({ lang }) => {
                 transition={{ type: "spring", damping: 25, stiffness: 200 }}
                 className="fixed bottom-0 left-0 w-full z-[160] flex justify-center pointer-events-none"
               >
-                <div className="pointer-events-auto w-full max-w-4xl mx-4 mb-4 md:mb-8 bg-[#050816] border border-[#00f2ff]/30 rounded-[32px] overflow-hidden shadow-[0_-20px_80px_rgba(0,0,0,0.8)] relative flex flex-col max-h-[80vh]">
+                <div
+                  id={`faq-drawer-${activeItem.id}`}
+                  role="dialog"
+                  aria-modal="true"
+                  aria-labelledby={`faq-title-${activeItem.id}`}
+                  className="pointer-events-auto w-full max-w-4xl mx-4 mb-4 md:mb-8 bg-[#050816] border border-[#00f2ff]/30 rounded-[32px] overflow-hidden shadow-[0_-20px_80px_rgba(0,0,0,0.8)] relative flex flex-col max-h-[80vh]"
+                >
                   {/* Drawer Header (Terminal Style) */}
                   <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-white/5">
                     <div className="flex items-center gap-3">
@@ -149,8 +192,9 @@ const FAQ: React.FC<FAQProps> = ({ lang }) => {
                       </span>
                     </div>
                     <button
-                      onClick={() => setActiveQuestionId(null)}
-                      className="p-2 hover:bg-white/10 rounded-full transition-colors group"
+                      ref={closeButtonRef}
+                      onClick={handleCloseDrawer}
+                      className="p-2 hover:bg-white/10 rounded-full transition-colors group focus-visible:ring-2 focus-visible:ring-[#00f2ff]"
                     >
                       <span className="sr-only">{t.close}</span>
                       <div className="group-hover:rotate-90 transition-transform duration-300">
@@ -162,7 +206,10 @@ const FAQ: React.FC<FAQProps> = ({ lang }) => {
                   {/* Drawer Content */}
                   <div className="p-6 md:p-10 overflow-y-auto">
                     <div className="mb-6">
-                      <h3 className="text-xl md:text-2xl font-bold text-[#00f2ff] mb-2 font-display">
+                      <h3
+                        id={`faq-title-${activeItem.id}`}
+                        className="text-xl md:text-2xl font-bold text-[#00f2ff] mb-2 font-display"
+                      >
                         {`> ${activeItem.question}`}
                       </h3>
                       <div className="w-full h-[1px] bg-gradient-to-r from-[#00f2ff]/50 to-transparent"></div>
@@ -174,7 +221,7 @@ const FAQ: React.FC<FAQProps> = ({ lang }) => {
 
                     <div className="mt-6 flex justify-end">
                       <button
-                        onClick={() => setActiveQuestionId(null)}
+                        onClick={handleCloseDrawer}
                         className="px-6 py-3 bg-white/10 hover:bg-white/20 rounded-lg text-xs font-bold uppercase tracking-widest text-white transition-colors"
                       >
                         {t.close} [ESC]
