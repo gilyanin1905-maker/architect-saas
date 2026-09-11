@@ -1,0 +1,3 @@
+## 2026-07-20 - FAQ Drawer Focus Management and Escape Key Support
+**Learning:** Drawers and modal overlays (such as terminal-style answer panels) that display a prompt like "[ESC]" need an explicit `keydown` listener for the `Escape` key and proper focus management (focusing the close button on open and returning focus to the trigger on close) alongside ARIA dialog attributes (`role="dialog"`, `aria-modal="true"`, `aria-labelledby`) for complete accessibility.
+**Action:** When implementing modal drawers, always save `document.activeElement` before opening, shift focus to the primary action inside the drawer, handle `Escape` key events, and restore focus upon closing.
