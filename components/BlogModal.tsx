@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { BLOG_DATA } from "../constants";
@@ -12,6 +13,30 @@ interface BlogModalProps {
 
 const BlogModal: React.FC<BlogModalProps> = ({ isOpen, onClose, lang }) => {
   const posts = BLOG_DATA[lang];
+  const closeButtonRef = React.useRef<HTMLButtonElement>(null);
+  const previousFocusRef = React.useRef<HTMLElement | null>(null);
+
+  React.useEffect(() => {
+    if (isOpen) {
+      previousFocusRef.current = document.activeElement as HTMLElement;
+      const timer = setTimeout(() => {
+        closeButtonRef.current?.focus();
+      }, 100);
+
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === "Escape") {
+          onClose();
+        }
+      };
+
+      window.addEventListener("keydown", handleKeyDown);
+      return () => {
+        clearTimeout(timer);
+        window.removeEventListener("keydown", handleKeyDown);
+        previousFocusRef.current?.focus();
+      };
+    }
+  }, [isOpen, onClose]);
 
   return (
     <AnimatePresence>
@@ -35,6 +60,9 @@ const BlogModal: React.FC<BlogModalProps> = ({ isOpen, onClose, lang }) => {
             className="fixed inset-0 pointer-events-none flex items-center justify-center z-[201] p-4 md:p-10"
           >
             <div
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="blog-modal-title"
               className="pointer-events-auto w-full max-w-4xl h-[80vh] bg-[#050816] [.light_&]:bg-white border border-white/10 rounded-[40px] shadow-2xl overflow-hidden flex flex-col relative"
               onClick={e => e.stopPropagation()}
             >
@@ -57,7 +85,10 @@ const BlogModal: React.FC<BlogModalProps> = ({ isOpen, onClose, lang }) => {
                     </svg>
                   </div>
                   <div>
-                    <h3 className="font-display font-bold text-2xl text-white [.light_&]:text-black">
+                    <h3
+                      id="blog-modal-title"
+                      className="font-display font-bold text-2xl text-white [.light_&]:text-black"
+                    >
                       Architect <span className="text-[#7b2ff7]">Feed</span>
                     </h3>
                     <p className="text-white/40 text-xs uppercase tracking-widest">
@@ -66,7 +97,9 @@ const BlogModal: React.FC<BlogModalProps> = ({ isOpen, onClose, lang }) => {
                   </div>
                 </div>
                 <button
+                  ref={closeButtonRef}
                   onClick={onClose}
+                  aria-label={lang === Language.RU ? "Закрыть" : "Close"}
                   className="w-12 h-12 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors text-white [.light_&]:text-black"
                 >
                   <XIcon />
