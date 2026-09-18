@@ -6,9 +6,10 @@ import { TelegramIcon, GitHubIcon, LinkedInIcon } from "./Icons";
 interface FooterProps {
   onNavigate: (id: string) => void;
   lang: Language;
+  onOpenBlog?: () => void;
 }
 
-const Footer: React.FC<FooterProps> = ({ onNavigate, lang }) => {
+const Footer: React.FC<FooterProps> = ({ onNavigate, lang, onOpenBlog }) => {
   const t = UI_TEXT[lang].footer;
   const navT = UI_TEXT[lang].nav;
   const roiT = UI_TEXT[lang].roi;
@@ -106,7 +107,18 @@ const Footer: React.FC<FooterProps> = ({ onNavigate, lang }) => {
             <h4 className="font-display font-bold text-white mb-6">{t.resourcesTitle}</h4>
             <ul className="space-y-3">
               <li>
-                <a href="#" className="text-sm text-white/50 hover:text-white transition-colors">
+                <a
+                  href="#"
+                  onClick={e => {
+                    e.preventDefault();
+                    if (onOpenBlog) {
+                      onOpenBlog();
+                    } else if ((window as any).__openBlogModal) {
+                      (window as any).__openBlogModal();
+                    }
+                  }}
+                  className="text-sm text-white/50 hover:text-white transition-colors"
+                >
                   {t.links.blog}
                 </a>
               </li>
