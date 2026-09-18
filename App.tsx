@@ -6,6 +6,7 @@ import Hero from "./components/Hero";
 import Loader from "./components/Loader";
 import Preloader from "./components/Preloader";
 import EvaRobot from "./components/EvaRobot";
+import BlogModal from "./components/BlogModal";
 import { Language } from "./types";
 
 // --- IMPORT FACTORIES (For Manual Preloading) ---
@@ -40,6 +41,13 @@ const App: React.FC = () => {
   const [theme, setTheme] = useState<"dark" | "light">("dark");
   const [activeSection, setActiveSection] = useState(0);
   const [isNavVisible, setIsNavVisible] = useState(true);
+
+  // Blog modal state
+  const [isBlogOpen, setIsBlogOpen] = useState(false);
+
+  useEffect(() => {
+    (window as any).__openBlogModal = () => setIsBlogOpen(true);
+  }, []);
 
   // NEW: Lifted Chat State
   const [isChatOpen, setIsChatOpen] = useState(false);
@@ -224,6 +232,12 @@ const App: React.FC = () => {
         triggerMessage={chatTriggerMessage}
       />
 
+      <BlogModal
+        isOpen={isBlogOpen}
+        onClose={() => setIsBlogOpen(false)}
+        lang={lang}
+      />
+
       <div
         className={`fixed right-8 top-1/2 -translate-x-1/2 z-[100] hidden lg:flex flex-col gap-4 items-center transition-opacity duration-500 ${isChatOpen ? "opacity-0 pointer-events-none" : "opacity-100"}`}
       >
@@ -256,7 +270,7 @@ const App: React.FC = () => {
         <section ref={footerRef} className="snap-section !h-auto !min-h-0 !pb-24 lg:!pb-0">
           <div className="w-full">
             <Suspense fallback={<div className="h-20 bg-black/10"></div>}>
-              <Footer onNavigate={handleNavigate} lang={lang} />
+              <Footer onNavigate={handleNavigate} lang={lang} onOpenBlog={() => setIsBlogOpen(true)} />
             </Suspense>
           </div>
         </section>
